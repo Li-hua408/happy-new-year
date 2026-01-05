@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新年快乐 🧨</title>
+    <style>
+        /* 全局样式 - 适配手机 */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "微软雅黑", sans-serif; }
+        body {
+            background: linear-gradient(120deg, #ffecd2, #fcb69f);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        /* 核心卡片 */
+        .happy-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(255, 105, 135, 0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+        /* 标题 */
+        .title {
+            color: #e63946;
+            font-size: 32px;
+            margin-bottom: 20px;
+            animation: bounce 1s ease infinite alternate;
+        }
+        /* 祝福语 */
+        .wish {
+            color: #457b9d;
+            font-size: 18px;
+            line-height: 1.8;
+            margin: 20px 0;
+        }
+        /* 小装饰 */
+        .decor {
+            font-size: 40px;
+            margin: 10px 0;
+        }
+        /* 底部文字 */
+        .footer {
+            color: #6c757d;
+            font-size: 14px;
+            margin-top: 30px;
+        }
+        /* 简单动画 - 新年氛围 */
+        @keyframes bounce {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+<div class="happy-card">
+    <div class="decor">🧧</div>
+    <h1 class="title">新年快乐！</h1>
+    <p class="wish">
+        愿你新的一年<br>
+        三餐四季，温柔有趣<br>
+        万事顺遂，平安喜乐<br>
+        龙行大运，钱兔无量 🐰
+    </p>
+    <div class="decor">🎆</div>
+    <p class="footer">2026 · 岁岁常欢愉</p>
+</div>
+</body>
+</html>
