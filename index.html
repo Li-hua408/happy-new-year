@@ -3,73 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>新年快乐 🧨</title>
+    <title>2026新年快乐 🧨</title>
     <style>
-        /* 全局样式 - 适配手机 */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "微软雅黑", sans-serif; }
-        body {
-            background: linear-gradient(120deg, #ffecd2, #fcb69f);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "微软雅黑", "PingFang SC", sans-serif; }
+        body { 
+            background: linear-gradient(135deg, #ff7e5f, #feb47b); 
+            min-height: 100vh; 
+            overflow: hidden; /* 隐藏溢出的动画元素 */
+            position: relative;
         }
-        /* 核心卡片 */
-        .happy-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px 20px;
-            text-align: center;
-            box-shadow: 0 8px 30px rgba(255, 105, 135, 0.2);
-            max-width: 400px;
+        /* 烟花/红包动画容器 */
+        .animation-container {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
+            height: 100%;
+            pointer-events: none; /* 不影响点击 */
+            z-index: 1;
         }
-        /* 标题 */
+        /* 核心祝福卡片 */
+        .happy-card {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 50px 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(255, 99, 71, 0.3);
+            max-width: 450px;
+            width: 90%;
+            margin: 100px auto 0;
+            backdrop-filter: blur(10px);
+            animation: float 3s ease-in-out infinite;
+        }
+        /* 标题渐变文字 */
         .title {
-            color: #e63946;
-            font-size: 32px;
-            margin-bottom: 20px;
-            animation: bounce 1s ease infinite alternate;
+            font-size: 36px;
+            background: linear-gradient(90deg, #e63946, #ff9a8b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 25px;
+            font-weight: bold;
         }
         /* 祝福语 */
         .wish {
-            color: #457b9d;
-            font-size: 18px;
-            line-height: 1.8;
+            color: #2d3436;
+            font-size: 20px;
+            line-height: 2;
             margin: 20px 0;
         }
-        /* 小装饰 */
+        /* 装饰图标 */
         .decor {
-            font-size: 40px;
-            margin: 10px 0;
+            font-size: 50px;
+            margin: 15px 0;
+            animation: bounce 1.5s ease infinite alternate;
         }
-        /* 底部文字 */
+        /* 底部信息 */
         .footer {
-            color: #6c757d;
-            font-size: 14px;
-            margin-top: 30px;
+            color: #636e72;
+            font-size: 16px;
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 1px solid #f1f1f1;
         }
-        /* 简单动画 - 新年氛围 */
+        /* 浮动动画 */
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+        /* 弹跳动画 */
         @keyframes bounce {
             from { transform: scale(1); }
-            to { transform: scale(1.05); }
+            to { transform: scale(1.1); }
         }
     </style>
 </head>
 <body>
-<div class="happy-card">
-    <div class="decor">🧧</div>
-    <h1 class="title">新年快乐！</h1>
-    <p class="wish">
-        愿你新的一年<br>
-        三餐四季，温柔有趣<br>
-        万事顺遂，平安喜乐<br>
-        龙行大运，钱兔无量 🐰
-    </p>
-    <div class="decor">🎆</div>
-    <p class="footer">2026 · 岁岁常欢愉</p>
-</div>
-</body>
+    <!-- 动画容器 -->
+    <div class="animation-container" id="animationContainer"></div>
+    
+    <!-- 祝福卡片 -->
+    <div class="happy-card">
+        <div class="decor">🧧</div>
+        <h1 class="title">新年快乐！</h1>
+        <p class="wish">
+            愿你新的一年<br>
+            龙行大运 万事兴龙<br>
+            岁岁常欢愉 年年皆胜意<br>
+            暴富暴美 平安喜乐 🎊
+        </p>
+        <div class="decor">🎆</div>
+        <p class="footer">2026 · 新春快乐</p>
+    </div>
 
+    <script>
+        // 生成随机数
+        function random(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        // 创建烟花/红包元素
+        function createElement(type) {
+            const elem = document.createElement('div');
+            // 随机选择新年元素
+            const icons = ['🧧', '🎆', '✨', '🍊', '🎉', '💰'];
+            elem.textContent = type === 'firework' ? icons[Math.floor(random(0, icons.length))] : '🧧';
+            elem.style.position = 'absolute';
+            elem.style.left = `${random(0, 100)}vw`;
+            elem.style.top = type === 'firework' ? '-20px' : `${random(-50, 0)}vh`;
+            elem.style.fontSize = `${random(16, 32)}px`;
+            elem.style.opacity = random(0.7, 1);
+            elem.style.transition = `all ${random(3, 8)}s ease-in`;
+            return elem;
+        }
+
+        // 飘落动画
+        function animateFalling() {
+            const container = document.getElementById('animationContainer');
+            // 随机创建烟花或红包
+            const type = Math.random() > 0.5 ? 'firework' : 'redpacket';
+            const elem = createElement(type);
+            container.appendChild(elem);
+
+            // 触发动画
+            setTimeout(() => {
+                elem.style.top = '100vh';
+                elem.style.left = `${random(0, 100)}vw`;
+                elem.style.opacity = 0;
+            }, 10);
+
+            // 移除元素
+            setTimeout(() => {
+                container.removeChild(elem);
+            }, 8000);
+        }
+
+        // 循环创建飘落元素
+        setInterval(animateFalling, 500);
+    </script>
+</body>
 </html>
+
