@@ -2,148 +2,144 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026新年快乐 🧨</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>洛克王国 - 迪莫</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "微软雅黑", "PingFang SC", sans-serif; }
-        body { 
-            background: linear-gradient(135deg, #ff7e5f, #feb47b); 
-            min-height: 100vh; 
-            overflow: hidden; /* 隐藏溢出的动画元素 */
-            position: relative;
+        body {
+            margin: 0; padding: 0; background-color: #ffffff;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; overflow: hidden; font-family: sans-serif;
         }
-        /* 烟花/红包动画容器 */
-        .animation-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none; /* 不影响点击 */
-            z-index: 1;
+        .scene { position: relative; width: 100%; max-width: 500px; aspect-ratio: 1/1; }
+
+        /* 地面阴影 */
+        .ground-shadow {
+            position: absolute; bottom: 12%; left: 50%; transform: translateX(-50%);
+            width: 55%; height: 8%; border-radius: 50%; opacity: 0;
+            background: radial-gradient(circle, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 70%);
+            animation: shadowFadeIn 0.8s ease-out 4.5s forwards;
         }
-        /* 核心祝福卡片 */
-        .happy-card {
-            position: relative;
-            z-index: 2;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 24px;
-            padding: 50px 30px;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(255, 99, 71, 0.3);
-            max-width: 450px;
-            width: 90%;
-            margin: 100px auto 0;
-            backdrop-filter: blur(10px);
-            animation: float 3s ease-in-out infinite;
+
+        /* 主体容器 */
+        .dimo-container {
+            width: 100%; height: 100%; opacity: 0;
+            animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 4.5s forwards; 
         }
-        /* 标题渐变文字 */
-        .title {
-            font-size: 36px;
-            background: linear-gradient(90deg, #e63946, #ff9a8b);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 25px;
-            font-weight: bold;
+        .dimo-svg {
+            width: 100%; height: 100%;
+            animation: breathe 3s ease-in-out infinite; animation-delay: 5.3s;
         }
-        /* 祝福语 */
-        .wish {
-            color: #2d3436;
-            font-size: 20px;
-            line-height: 2;
-            margin: 20px 0;
+
+        /* ========== 核心：画图动画样式 ========== */
+        .draw-path {
+            fill-opacity: 0;
+            stroke-dasharray: 1500;
+            stroke-dashoffset: 1500;
+            animation: drawLine 1.5s ease-in-out forwards;
         }
-        /* 装饰图标 */
-        .decor {
-            font-size: 50px;
-            margin: 15px 0;
-            animation: bounce 1.5s ease infinite alternate;
+        
+        /* 需要填色的元素才加这个类 */
+        .fill-fade { animation: fillColor 1s ease-in-out forwards; }
+        
+        /* 【关键修复】纯线条元素专用：只画线，绝不参与填色动画 */
+        .line-only { animation: drawLineOnly 1.5s ease-in-out forwards; }
+
+        /* 各部位时间轴 */
+        .step-1 { animation-delay: 0.2s; }   /* 尾巴 */
+        .step-2 { animation-delay: 1.0s; }   /* 身体 */
+        .step-3 { animation-delay: 1.8s; }   /* 耳朵 */
+        .step-4 { animation-delay: 2.6s; }   /* 脸部 */
+        .step-5 { animation-delay: 3.4s; }   /* 五官细节 */
+
+        /* 填色统一在最后一步画完后开始 */
+        .delay-fill { animation-delay: 4.0s; } 
+
+        @keyframes drawLine { to { stroke-dashoffset: 0; } }
+        /* 纯线条专属动画：保持 fill-opacity 始终为 0，避免被吞 */
+        @keyframes drawLineOnly { 
+            0% { stroke-dashoffset: 1500; fill-opacity: 0; } 
+            100% { stroke-dashoffset: 0; fill-opacity: 0; } 
         }
-        /* 底部信息 */
-        .footer {
-            color: #636e72;
-            font-size: 16px;
-            margin-top: 35px;
-            padding-top: 20px;
-            border-top: 1px solid #f1f1f1;
-        }
-        /* 浮动动画 */
-        @keyframes float {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0); }
-        }
-        /* 弹跳动画 */
-        @keyframes bounce {
-            from { transform: scale(1); }
-            to { transform: scale(1.1); }
-        }
+        @keyframes fillColor { to { fill-opacity: 1; } }
+        @keyframes popIn { 0% { transform: translateY(100px) scale(0.5); opacity: 0; } 100% { transform: translateY(0) scale(1); opacity: 1; } }
+        @keyframes breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        @keyframes shadowFadeIn { to { opacity: 1; } }
     </style>
 </head>
 <body>
-    <!-- 动画容器 -->
-    <div class="animation-container" id="animationContainer"></div>
-    
-    <!-- 祝福卡片 -->
-    <div class="happy-card">
-        <div class="decor">🧧</div>
-        <h1 class="title">天真，新年快乐！</h1>
-        <p class="wish">
-            愿你新的一年<br>
-            龙行大运 万事兴龙<br>
-            岁岁常欢愉 年年皆胜意<br>
-            暴富暴美 平安喜乐 🎊
-        </p>
-        <div class="decor">🎆</div>
-        <p class="footer">2026 · 新春快乐</p>
+
+<div class="scene">
+    <div class="ground-shadow"></div>
+    <div class="dimo-container">
+        <svg class="dimo-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <radialGradient id="bodyBlue" cx="40%" cy="30%" r="60%">
+                    <stop offset="0%" stop-color="#74b9ff" />
+                    <stop offset="70%" stop-color="#0984e3" />
+                    <stop offset="100%" stop-color="#0652DD" />
+                </radialGradient>
+                <radialGradient id="bellyWhite" cx="50%" cy="40%" r="60%">
+                    <stop offset="0%" stop-color="#ffffff" />
+                    <stop offset="100%" stop-color="#f1f2f6" />
+                </radialGradient>
+                <linearGradient id="yellowAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ffeaa7" />
+                    <stop offset="100%" stop-color="#fdcb6e" />
+                </linearGradient>
+            </defs>
+
+            <!-- 1. 后方大尾巴 -->
+            <g class="draw-path step-1 fill-fade delay-fill" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round">
+                <path d="M 240 280 C 320 300, 380 220, 340 140 C 320 100, 280 120, 270 160 C 260 200, 250 240, 240 280 Z" fill="url(#bodyBlue)" />
+                <path d="M 340 140 C 320 100, 280 120, 270 160 L 290 150 C 300 130, 320 130, 340 140 Z" fill="url(#yellowAccent)" stroke="none" />
+            </g>
+
+            <!-- 2. 身体躯干 & 四肢 -->
+            <g class="draw-path step-2 fill-fade delay-fill" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round">
+                <ellipse cx="150" cy="310" rx="25" ry="15" fill="url(#bodyBlue)" transform="rotate(-15 150 310)" />
+                <ellipse cx="240" cy="320" rx="30" ry="18" fill="url(#bodyBlue)" transform="rotate(10 240 320)" />
+                <path d="M 140 220 C 100 200, 90 160, 120 150 C 140 140, 160 170, 160 200 Z" fill="url(#bodyBlue)" />
+                <path d="M 260 230 C 300 240, 320 210, 300 190 C 280 170, 260 200, 250 220 Z" fill="url(#bodyBlue)" />
+                <path d="M 135 170 C 95 210, 110 320, 190 330 C 270 340, 305 240, 265 170 C 245 120, 155 120, 135 170 Z" fill="url(#bodyBlue)" />
+                <path d="M 160 220 C 130 260, 140 300, 190 310 C 240 320, 270 250, 240 220 C 220 190, 180 190, 160 220 Z" fill="url(#bellyWhite)" stroke="none" />
+            </g>
+
+            <!-- 3. 宽耳朵 -->
+            <g class="draw-path step-3 fill-fade delay-fill" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round">
+                <path d="M 145 150 C 90 80, 40 60, 60 110 C 80 160, 120 170, 155 160 Z" fill="url(#bodyBlue)" />
+                <path d="M 135 140 C 95 85, 60 75, 75 115 C 90 155, 120 160, 145 150 Z" fill="url(#yellowAccent)" stroke="none" />
+                <path d="M 255 150 C 310 80, 360 60, 340 110 C 320 160, 280 170, 245 160 Z" fill="url(#bodyBlue)" />
+                <path d="M 265 140 C 305 85, 340 75, 325 115 C 310 155, 280 160, 255 150 Z" fill="url(#yellowAccent)" stroke="none" />
+            </g>
+
+            <!-- 4. 脸部 (被头顶蓝色包围) -->
+            <g class="draw-path step-4 fill-fade delay-fill" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round">
+                <ellipse cx="200" cy="195" rx="65" ry="55" fill="url(#bellyWhite)" />
+            </g>
+
+            <!-- 5. 五官细节 -->
+            <g class="draw-path step-5" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round">
+                <!-- 额头黄色V形标记 (需要填色) -->
+                <path class="fill-fade delay-fill" d="M 185 170 Q 200 190 215 170 Q 200 180 185 170 Z" fill="url(#yellowAccent)" stroke="none" />
+                
+                <!-- 腮红 (需要填色) -->
+                <ellipse class="fill-fade delay-fill" cx="155" cy="215" rx="10" ry="6" fill="#fab1a0" opacity="0.8" stroke="none" />
+                <ellipse class="fill-fade delay-fill" cx="245" cy="215" rx="10" ry="6" fill="#fab1a0" opacity="0.8" stroke="none" />
+                
+                <!-- 【终极修复】左眼：使用 line-only 类，彻底隔离 fill-opacity 动画 -->
+                <path class="line-only" d="M 165 200 Q 175 190 185 200" fill="none" stroke="#2c3e50" stroke-width="5" stroke-linecap="round" />
+                
+                <!-- 右眼 (深棕色大眼 + 双高光，需要填色) -->
+                <ellipse class="fill-fade delay-fill" cx="225" cy="200" rx="12" ry="16" fill="#2c3e50" stroke="none" />
+                <circle class="fill-fade delay-fill" cx="229" cy="194" r="4" fill="#ffffff" stroke="none" />
+                <circle class="fill-fade delay-fill" cx="221" cy="204" r="2" fill="#ffffff" stroke="none" />
+                
+                <!-- 张开的粉色嘴巴 (需要填色) -->
+                <path class="fill-fade delay-fill" d="M 190 220 Q 200 245 210 220 Z" fill="#ff7675" stroke="#2c3e50" stroke-width="3" />
+                <path class="fill-fade delay-fill" d="M 194 222 Q 200 235 206 222 Z" fill="#d63031" stroke="none" />
+            </g>
+        </svg>
     </div>
-
-    <script>
-        // 生成随机数
-        function random(min, max) {
-            return Math.random() * (max - min) + min;
-        }
-
-        // 创建烟花/红包元素
-        function createElement(type) {
-            const elem = document.createElement('div');
-            // 随机选择新年元素
-            const icons = ['🧧', '🎆', '✨', '🍊', '🎉', '💰'];
-            elem.textContent = type === 'firework' ? icons[Math.floor(random(0, icons.length))] : '🧧';
-            elem.style.position = 'absolute';
-            elem.style.left = `${random(0, 100)}vw`;
-            elem.style.top = type === 'firework' ? '-20px' : `${random(-50, 0)}vh`;
-            elem.style.fontSize = `${random(16, 32)}px`;
-            elem.style.opacity = random(0.7, 1);
-            elem.style.transition = `all ${random(3, 8)}s ease-in`;
-            return elem;
-        }
-
-        // 飘落动画
-        function animateFalling() {
-            const container = document.getElementById('animationContainer');
-            // 随机创建烟花或红包
-            const type = Math.random() > 0.5 ? 'firework' : 'redpacket';
-            const elem = createElement(type);
-            container.appendChild(elem);
-
-            // 触发动画
-            setTimeout(() => {
-                elem.style.top = '100vh';
-                elem.style.left = `${random(0, 100)}vw`;
-                elem.style.opacity = 0;
-            }, 10);
-
-            // 移除元素
-            setTimeout(() => {
-                container.removeChild(elem);
-            }, 8000);
-        }
-
-        // 循环创建飘落元素
-        setInterval(animateFalling, 500);
-    </script>
+</div>
 </body>
 </html>
-
